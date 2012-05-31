@@ -22,7 +22,7 @@ credentials.
 
     $ bundle install
 
-4. Copy .env.sample file and edit it to match your credentials received form
+4. Copy .env.sample file and edit it to match your credentials received from
 Bancbox.
 
     $ mv .env.sample .env
