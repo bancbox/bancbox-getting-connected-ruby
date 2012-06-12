@@ -1,6 +1,14 @@
+# This file includes a sample client implementation
+# which encapsulates SOAP calls to BancBox.
+# Currently 3 method calls are provided: Creating a client, getting a client's details
+# and searching for client information
+
 require 'savon'
 
 module BancBox
+
+  # Configuration options for the client
+  # Set wsdl_endpoint to production url when rady to move from testing
   class << self
     attr_accessor :username, :password, :subscriber_id
     attr_writer :wsdl_endpoint
@@ -15,8 +23,10 @@ module BancBox
 
   end
 
+  # Main client providing the sample functionalities.
   class Client
 
+    # Setup the SAOP client with credentials
     def initialize
       @soap_client = Savon::Client.new do
         wsdl.document = BancBox.wsdl_endpoint
@@ -25,6 +35,8 @@ module BancBox
       self
     end
 
+    # Create a client on BancBox
+    # See http://www.bancbox.com/api/view/2 for details
     def create_client(params = {})
       resp = setup_client(:create_client) do |soap|
         soap.body do |xml|
@@ -49,6 +61,8 @@ module BancBox
       return resp[:create_client_response][:return]
     end
 
+    # Search all previously created clients
+    # See http://www.bancbox.com/api/view/8 for details
     def list_clients
       resp = setup_client(:search_clients) do |soap|
         soap.body do |xml|
@@ -60,6 +74,8 @@ module BancBox
       return resp[:search_clients_response][:return]
     end
 
+    # Get a created client's details
+    # See http://www.bancbox.com/api/view/8 for details
     def get_client(bancbox_id = nil, ref_id = nil)
       resp = setup_client(:get_client) do |soap|
         soap.body do |xml|
@@ -76,6 +92,9 @@ module BancBox
     end
 
     private
+
+    # Setup the SOAP client for common options
+    # to be passed with every request
     def setup_client(method_name)
       @soap_client.request :sch, method_name do
         soap.env_namespace = :soapenv
