@@ -32,7 +32,6 @@ module BancBox
         wsdl.document = BancBox.wsdl_endpoint
         wsse.credentials(BancBox.username, BancBox.password)
       end
-      self
     end
 
     # Create a client on BancBox
